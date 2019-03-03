@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Megas">
 <meta property="og:description" content="其他杂项总结例如hexo部署、js简单语法、map和reduce在js中的实现、idea中maven的配置">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-22T06:54:36.261Z">
+<meta property="og:updated_time" content="2019-02-19T06:08:19.170Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="others.md">
 <meta name="twitter:description" content="其他杂项总结例如hexo部署、js简单语法、map和reduce在js中的实现、idea中maven的配置">
@@ -327,6 +327,7 @@
 </ol>
 <p>js本身就是单线程，同步与异步的区别就在于这条流水线上各个流程的执行顺序不同，除主线程外，所有的异步程序放到“任务队列”<br>ajax实现同步<code>async:false,</code><br><code>$.post</code> <code>$.get</code> <code>$.ajax</code></p>
 <h3 id="js语法"><a href="#js语法" class="headerlink" title="js语法"></a>js语法</h3><p>数组：<code>new array()</code>、<code>[]</code>，数组可以随意修改长度、数据<code>var arr = [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;]; arr[1] = 99; arr[5] = 99;</code>,数组也可以用indexof()通过数据找到索引。<br>对象：<code>{}</code><br>字符串对象不可变，即不能修改</p>
+<p><code>$(&#39;#single&#39;).click()</code>将id为single的执行点击事件。</p>
 <h3 id="map-reduce"><a href="#map-reduce" class="headerlink" title="map_reduce"></a>map_reduce</h3><p>map通过传入函数使得对一组数据进行相同的操作</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pow</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x * x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>];</span><br><span class="line"><span class="keyword">var</span> results = arr.map(pow); <span class="comment">// [1, 4, 9, 16, 25, 36, 49, 64, 81]</span></span><br></pre></td></tr></table></figure>
 <p>reduce把结果继续和序列的下一个元素做累积计算</p>
@@ -334,19 +335,22 @@
 <h3 id="idea添加maven依赖"><a href="#idea添加maven依赖" class="headerlink" title="idea添加maven依赖"></a>idea添加maven依赖</h3><p>选中项目——&gt;右键——&gt;选择Add Framworks Support——&gt;选择maven</p>
 <h3 id="三目运算符"><a href="#三目运算符" class="headerlink" title="三目运算符"></a>三目运算符</h3><p><code>a ? b : c ? d : e</code>将按<code>a ? b : (c ? d : e)</code>执行,条件a为真则赋值b，条件a为假则赋值<code>(c ? d : e)</code>;</p>
 <h3 id="chrome只支持mp4的avc格式压缩"><a href="#chrome只支持mp4的avc格式压缩" class="headerlink" title="chrome只支持mp4的avc格式压缩"></a>chrome只支持mp4的avc格式压缩</h3><h3 id="mysql数据库导入导出"><a href="#mysql数据库导入导出" class="headerlink" title="mysql数据库导入导出"></a>mysql数据库导入导出</h3><p>mysqldump source  </p>
-<h3 id="山本耀司"><a href="#山本耀司" class="headerlink" title="山本耀司"></a>山本耀司</h3><p>我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。</p>
+<h3 id="山本耀司"><a href="#山本耀司" class="headerlink" title="山本耀司"></a>山本耀司</h3><font color="#FF0000">我从不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现更广阔的人生，那样的自由才是珍贵的、有价值的。我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。</font>
+
 <h3 id="django-项目"><a href="#django-项目" class="headerlink" title="django 项目"></a>django 项目</h3><p>python manage.py runserver</p>
-<h3 id="Latex数学公式："><a href="#Latex数学公式：" class="headerlink" title="Latex数学公式："></a>Latex数学公式：</h3><p><code>\alpha</code> 、$\alpha$、<code>\beta</code> 、 $\beta$ 、 <code>\omega</code> 、$\omega$<br>求和、求极限、求积分<br><code>\frac{}{}</code> 、 $\frac{3}{8}$<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">    \begin&#123;matrix&#125;</span><br><span class="line">    1 &amp; x &amp; x^2 \\</span><br><span class="line">    1 &amp; y &amp; y^2 \\</span><br><span class="line">    1 &amp; z &amp; z^2 \\</span><br><span class="line">    \end&#123;matrix&#125;</span><br><span class="line">$$</span><br></pre></td></tr></table></figure></p>
+<h3 id="Latex数学公式："><a href="#Latex数学公式：" class="headerlink" title="Latex数学公式："></a><a href="https://blog.csdn.net/Robin__Chou/article/details/51480648" target="_blank" rel="noopener">Latex数学公式</a>：</h3><p><code>\alpha</code> 、$\alpha$、<code>\beta</code> 、 $\beta$ 、 <code>\omega</code> 、$\omega$<br>求和、求极限、求积分<br><code>\frac{}{}</code> 、 $\frac{3}{8}$</p>
 <p>$$<br>    \begin{matrix}<br>    1 &amp; x &amp; x^2 \<br>    1 &amp; y &amp; y^2 \<br>    1 &amp; z &amp; z^2 \<br>    \end{matrix}<br>$$</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">X=\left|</span><br><span class="line">    \begin&#123;matrix&#125;</span><br><span class="line">        x_&#123;11&#125; &amp; x_&#123;12&#125; &amp; \cdots &amp; x_&#123;1d&#125;\\</span><br><span class="line">        x_&#123;21&#125; &amp; x_&#123;22&#125; &amp; \cdots &amp; x_&#123;2d&#125;\\</span><br><span class="line">        \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\</span><br><span class="line">        x_&#123;m1&#125; &amp; x_&#123;m2&#125; &amp; \cdots &amp; x_&#123;md&#125;\\</span><br><span class="line">    \end&#123;matrix&#125;</span><br><span class="line">\right|</span><br><span class="line">$$</span><br></pre></td></tr></table></figure>
+<p>$$<br>    \begin{matrix}<br>    1 &amp; x &amp; x^2 \<br>    1 &amp; y &amp; y^2 \<br>    1 &amp; z &amp; z^2 \<br>    \end{matrix}<br>$$</p>
+<p>$$<br>X=\left|<br>    \begin{matrix}<br>        x_{11} &amp; x_{12} &amp; \cdots &amp; x_{1d}\<br>        x_{21} &amp; x_{22} &amp; \cdots &amp; x_{2d}\<br>        \vdots &amp; \vdots &amp; \ddots &amp; \vdots\<br>        x_{m1} &amp; x_{m2} &amp; \cdots &amp; x_{md}\<br>    \end{matrix}<br>\right|<br>$$</p>
 <p>$$<br>X=\left|<br>    \begin{matrix}<br>        x_{11} &amp; x_{12} &amp; \cdots &amp; x_{1d}\<br>        x_{21} &amp; x_{22} &amp; \cdots &amp; x_{2d}\<br>        \vdots &amp; \vdots &amp; \ddots &amp; \vdots\<br>        x_{m1} &amp; x_{m2} &amp; \cdots &amp; x_{md}\<br>    \end{matrix}<br>\right|<br>$$</p>
 <p>$$<br>\begin{equation}<br>E=mc^2<br>\end{equation}<br>$$</p>
+<p>$$E=mc^2 $$</p>
 <p>$$<br>f(n) =<br>\begin{cases}<br>n/2,  &amp; \text{if $n$ is even} \<br>3n+1, &amp; \text{if $n$ is odd}<br>\end{cases}<br>$$</p>
 <p>$$<br>\left{<br>\begin{array}{c}<br>    a_1x+b_1y+c_1z=d_1 \<br>    a_2x+b_2y+c_2z=d_2 \<br>    a_3x+b_3y+c_3z=d_3<br>\end{array}<br>\right.<br>$$</p>
 <p>线性模型<br>$$h(\theta) = \sum_{j = 0} ^n \theta_j x_j$$</p>
 <p>均方误差<br>$$J(\theta) = \frac{1}{2m}\sum_{i = 0} ^m(y^i - h_\theta (x^i))^2$$</p>
 <p>批量梯度下降<br>$$\frac{\partial J(\theta)}{\partial\theta_j}=-\frac1m\sum_{i=0}^m(y^i-h_\theta(x^i))x^i_j $$</p>
-<p>$$<br>\begin{align}<br>\frac{\partial J(\theta)}{\partial\theta_j}<br>&amp; = -\frac1m\sum_{i=0}^m(y^i-h_\theta(x^i)) \frac{\partial}{\partial\theta_j}(y^i-h_\theta(x^i)) \<br>&amp; = -\frac1m\sum_{i=0}^m(y^i-h_\theta(x^i)) \frac{\partial}{\partial\theta_j}(\sum_{j=0}^n\theta_jx_j^i-y^i) \<br>&amp; = -\frac1m\sum_{i=0}^m(y^i-h_\theta(x^i))x^i_j<br>\end{align}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>\frac{\partial J(\theta)}{\partial\theta_j}<br>&amp; = -\frac1m\sum_{i=0}^m(y^i-h_\theta(x^i)) \frac{\partial}{\partial\theta_j}(y^i-h_\theta(x^i)) \<br>&amp; = -\frac1m\sum_{i=0}^m(y^i-h_\theta(x^i)) \frac{\partial}{\partial\theta_j}(\sum_{j=0}^n\theta_jx_j^i-y^i) \<br>&amp; = -\frac1m\sum_{i=0}^m(y^i-h_\theta(x^i))x^i_j<br>\end{aligned}<br>$$</p>
 
       
     </div>
