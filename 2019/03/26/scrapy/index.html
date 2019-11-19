@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="使用scrapy爬取图片items.py 负责数据模型的建立，类似于实体类。middlewares.py 自己定义的中间件。pipelines.py 负责对spider返回数据的处理。settings.py 负责对整个爬虫的配置。scrapy.cfg scrapy基础配置.spiders目录 负责存放继承自scrapy的爬虫类。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scrapy">
+<meta property="og:url" content="http://yoursite.com/2019/03/26/scrapy/index.html">
+<meta property="og:site_name" content="Megas">
+<meta property="og:description" content="使用scrapy爬取图片items.py 负责数据模型的建立，类似于实体类。middlewares.py 自己定义的中间件。pipelines.py 负责对spider返回数据的处理。settings.py 负责对整个爬虫的配置。scrapy.cfg scrapy基础配置.spiders目录 负责存放继承自scrapy的爬虫类。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-16T03:11:37.433Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scrapy">
+<meta name="twitter:description" content="使用scrapy爬取图片items.py 负责数据模型的建立，类似于实体类。middlewares.py 自己定义的中间件。pipelines.py 负责对spider返回数据的处理。settings.py 负责对整个爬虫的配置。scrapy.cfg scrapy基础配置.spiders目录 负责存放继承自scrapy的爬虫类。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/26/scrapy/"/>
+
+
+
+
+
+  <title>scrapy | Megas</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Megas</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-摘记">
+          <a href="/apple" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-apple"></i> <br />
+            
+            摘记
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-cloud"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/26/scrapy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Neo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Megas">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">scrapy</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-26T19:58:02+08:00">
+                2019-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="使用scrapy爬取图片"><a href="#使用scrapy爬取图片" class="headerlink" title="使用scrapy爬取图片"></a>使用scrapy爬取图片</h1><p><code>items.py</code> 负责数据模型的建立，类似于实体类。<br><code>middlewares.py</code> 自己定义的中间件。<br><code>pipelines.py</code> 负责对spider返回数据的处理。<br><code>settings.py</code> 负责对整个爬虫的配置。<br><code>scrapy.cfg</code> scrapy基础配置.<br>spiders目录 负责存放继承自scrapy的爬虫类。</p>
+<a id="more"></a>
+<h2 id="scrapy新建项目"><a href="#scrapy新建项目" class="headerlink" title="scrapy新建项目"></a>scrapy新建项目</h2><p><code>scrapy startproject test1</code></p>
+<h2 id="scrapy新建爬虫类webSpider"><a href="#scrapy新建爬虫类webSpider" class="headerlink" title="scrapy新建爬虫类webSpider"></a>scrapy新建爬虫类webSpider</h2><blockquote>
+<p>scrapy总共有四种spyder模板，默认使用第一个basic模板</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Available templates:</span><br><span class="line">  basic</span><br><span class="line">  crawl</span><br><span class="line">  csvfeed</span><br><span class="line">  xmlfeed</span><br></pre></td></tr></table></figure>
+<p>使用默认模板<code>scrapy genspider web &quot;http://ec.yto.net.cn/register.htm&quot;</code><br>使用crawl模板<code>scrapy genspider -t crawl web &quot;http://ec.yto.net.cn/register.htm&quot;</code></p>
+<h2 id="settting配置"><a href="#settting配置" class="headerlink" title="settting配置"></a>settting配置</h2><p><code>ROBOTSTXT_OBEY = True</code> 注释掉，使得不用遵守机器人协议</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ITEM_PIPELINES = &#123;<span class="string">'mythread.pipelines.MythreadPipeline'</span>: <span class="number">300</span>&#125;</span><br><span class="line">IMAGES_STORE = <span class="string">'E:\\pic2'</span></span><br></pre></td></tr></table></figure>
+<p>使用自己的爬虫<code>pipeline</code>,延迟时间设置为300毫秒，并且自定义存储路径</p>
+<h2 id="item配置"><a href="#item配置" class="headerlink" title="item配置"></a>item配置</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">image_urls = scrapy.Field()</span><br><span class="line">images = scrapy.Field()</span><br><span class="line">image_paths = scrapy.Field()</span><br></pre></td></tr></table></figure>
+<h2 id="中间件（pipeline）配置"><a href="#中间件（pipeline）配置" class="headerlink" title="中间件（pipeline）配置"></a>中间件（pipeline）配置</h2><p>在爬取图片时要注意该类要继承自<code>ImagesPipeline</code>类，并重写<code>get_media_requests</code>方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"><span class="keyword">from</span> scrapy.contrib.pipeline.images <span class="keyword">import</span> ImagesPipeline</span><br><span class="line"><span class="keyword">from</span> scrapy.exceptions <span class="keyword">import</span> DropItem</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyImagesPipeline</span><span class="params">(ImagesPipeline)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">get_media_requests</span><span class="params">(self, item, info)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> image_url <span class="keyword">in</span> item[<span class="string">'image_urls'</span>]:</span><br><span class="line">                <span class="keyword">yield</span> scrapy.Request(image_url)</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">item_completed</span><span class="params">(self, results, item, info)</span>:</span></span><br><span class="line">        image_paths = [x[<span class="string">'path'</span>] <span class="keyword">for</span> ok, x <span class="keyword">in</span> results <span class="keyword">if</span> ok]</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> image_paths:</span><br><span class="line">                <span class="keyword">raise</span> DropItem(<span class="string">"Item contains no images"</span>)</span><br><span class="line">        item[<span class="string">'image_paths'</span>] = image_paths</span><br><span class="line">        <span class="keyword">return</span> item</span><br></pre></td></tr></table></figure>
+<h2 id="spyder配置"><a href="#spyder配置" class="headerlink" title="spyder配置"></a>spyder配置</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    context = response.xpath(<span class="string">'//*[@id="yzm"]/@src'</span>).extract()</span><br><span class="line">    print(context)</span><br></pre></td></tr></table></figure>
+<h2 id="到项目的目录运行项目"><a href="#到项目的目录运行项目" class="headerlink" title="到项目的目录运行项目"></a>到项目的<em>目录</em>运行项目</h2><p><code>scrapy crawl web</code>,–nolog使用无日志模式。</p>
+<h1 id="多级页面爬虫"><a href="#多级页面爬虫" class="headerlink" title="多级页面爬虫"></a>多级页面爬虫</h1><blockquote>
+<p>多级页面可以多次使用<code>yield request</code>来获取下一级页面的连接,并且可以通过request的meta属性来进行值传递。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    context = response.xpath(<span class="string">'//tr/td/a/@href'</span>).extract()</span><br><span class="line">    category = response.xpath(<span class="string">'//tr/td/a/text()'</span>).extract()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(category)):</span><br><span class="line">        url = <span class="string">"http://www.nosta.gov.cn/upload/2019slxmgb/"</span> + context[i]</span><br><span class="line">        request = scrapy.http.Request(url, callback=self.parseArticle, dont_filter=<span class="keyword">True</span>)</span><br><span class="line">        request.meta[<span class="string">'item'</span>] = url</span><br><span class="line">        request.meta[<span class="string">'category'</span>] = category[i]</span><br><span class="line">        <span class="keyword">yield</span> request</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parseArticle</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    header = response.meta[<span class="string">'item'</span>][<span class="number">0</span>:<span class="number">-12</span>]</span><br><span class="line">    category = response.meta[<span class="string">'category'</span>]</span><br><span class="line">    context = response.xpath(<span class="string">'//tr/td/a/@href'</span>).extract()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(context)):</span><br><span class="line">        url = header + context[i]</span><br><span class="line">        request = scrapy.http.Request(url, callback=self.thirdArticle, dont_filter=<span class="keyword">True</span>)</span><br><span class="line">        request.meta[<span class="string">'category'</span>] = category</span><br><span class="line">        <span class="keyword">yield</span> request</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">thirdArticle</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    category = response.meta[<span class="string">'category'</span>]</span><br><span class="line">    urls = response.xpath(<span class="string">'//img'</span>).re(<span class="string">"&lt;img src=\"..(.*?)\" width=\"840px\"&gt;"</span>)</span><br><span class="line">    name = response.xpath(<span class="string">'//*[@id="dgNatureList"]/tbody/tr[1]/td[2]/text()'</span>).extract()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(urls)):</span><br><span class="line">        url = <span class="string">"http://www.nosta.gov.cn/upload/2019slxmgb/"</span> + urls[i]</span><br><span class="line">        item = NostaPictureItem()</span><br><span class="line">        item[<span class="string">'image_urls'</span>] = [url]</span><br><span class="line">        item[<span class="string">'image_name'</span>] = name</span><br><span class="line">        item[<span class="string">'category'</span>] = category</span><br><span class="line">        <span class="keyword">yield</span> item</span><br></pre></td></tr></table></figure>
+<h2 id="使用自定义名称来命名图片名称，而不用初始化的SHA1-hash值来命名"><a href="#使用自定义名称来命名图片名称，而不用初始化的SHA1-hash值来命名" class="headerlink" title="使用自定义名称来命名图片名称，而不用初始化的SHA1 hash值来命名"></a>使用自定义名称来命名图片名称，而不用初始化的SHA1 hash值来命名</h2><p>主要通过修改<code>file_path</code>函数来达到该目的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_media_requests</span><span class="params">(self, item, info)</span>:</span></span><br><span class="line">image_name = item[<span class="string">'image_name'</span>]</span><br><span class="line">category = item[<span class="string">'category'</span>]</span><br><span class="line"><span class="keyword">for</span> image_url <span class="keyword">in</span> item[<span class="string">'image_urls'</span>]:</span><br><span class="line">        <span class="keyword">yield</span> scrapy.Request(image_url, meta=&#123;<span class="string">'image_name'</span>: image_name, <span class="string">'category'</span>: category&#125;)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">file_path</span><span class="params">(self, request, response=None, info=None)</span>:</span></span><br><span class="line">ls = str(hash(request))</span><br><span class="line">image_name = request.meta[<span class="string">'image_name'</span>]</span><br><span class="line">category = request.meta[<span class="string">'category'</span>]</span><br><span class="line">down_file_name = <span class="string">'E:\picture\&#123;0&#125;\&#123;1&#125;\&#123;2&#125;.jpg'</span>.format(category, image_name[<span class="number">0</span>], ls[<span class="number">-5</span>:])</span><br><span class="line"><span class="keyword">return</span> down_file_name</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">item_completed</span><span class="params">(self, results, item, info)</span>:</span></span><br><span class="line">image_paths = [x[<span class="string">'path'</span>] <span class="keyword">for</span> ok, x <span class="keyword">in</span> results <span class="keyword">if</span> ok]</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> image_paths:</span><br><span class="line">        <span class="keyword">raise</span> DropItem(<span class="string">"Item contains no images"</span>)</span><br><span class="line">item[<span class="string">'image_path'</span>] = image_paths</span><br><span class="line"><span class="keyword">return</span> item</span><br></pre></td></tr></table></figure>
+<h2 id="页面内容提取"><a href="#页面内容提取" class="headerlink" title="页面内容提取"></a>页面内容提取</h2><p>一般使用xpath直接提取或者利用正则表达式提取</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">url = response.xpath(<span class="string">'//img/@src'</span>).extract()</span><br><span class="line"><span class="comment"># url = response.xpath('//img').re("&lt;img src=\"..(.*?) width=\"840px\"&gt;")</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> url:</span><br><span class="line">        print(i[<span class="number">2</span>:])</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/25/winform-cef/" rel="next" title="winform_cef">
+                <i class="fa fa-chevron-left"></i> winform_cef
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/05/DLlearning/" rel="prev" title="DLlearning">
+                DLlearning <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Neo" />
+            
+              <p class="site-author-name" itemprop="name">Neo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用scrapy爬取图片"><span class="nav-number">1.</span> <span class="nav-text">使用scrapy爬取图片</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#scrapy新建项目"><span class="nav-number">1.1.</span> <span class="nav-text">scrapy新建项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scrapy新建爬虫类webSpider"><span class="nav-number">1.2.</span> <span class="nav-text">scrapy新建爬虫类webSpider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#settting配置"><span class="nav-number">1.3.</span> <span class="nav-text">settting配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item配置"><span class="nav-number">1.4.</span> <span class="nav-text">item配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中间件（pipeline）配置"><span class="nav-number">1.5.</span> <span class="nav-text">中间件（pipeline）配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spyder配置"><span class="nav-number">1.6.</span> <span class="nav-text">spyder配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#到项目的目录运行项目"><span class="nav-number">1.7.</span> <span class="nav-text">到项目的目录运行项目</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多级页面爬虫"><span class="nav-number">2.</span> <span class="nav-text">多级页面爬虫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用自定义名称来命名图片名称，而不用初始化的SHA1-hash值来命名"><span class="nav-number">2.1.</span> <span class="nav-text">使用自定义名称来命名图片名称，而不用初始化的SHA1 hash值来命名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#页面内容提取"><span class="nav-number">2.2.</span> <span class="nav-text">页面内容提取</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Neo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
