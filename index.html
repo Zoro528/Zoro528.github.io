@@ -319,65 +319,18 @@
 
       
         
-          
-            <h1 id="AIStation-环境搭建说明"><a href="#AIStation-环境搭建说明" class="headerlink" title="AIStation 环境搭建说明"></a>AIStation 环境搭建说明</h1><h2 id="ssh连接"><a href="#ssh连接" class="headerlink" title="ssh连接"></a>ssh连接</h2><ol>
+          <h1 id="AIStation-环境搭建说明"><a href="#AIStation-环境搭建说明" class="headerlink" title="AIStation 环境搭建说明"></a>AIStation 环境搭建说明</h1><h2 id="ssh连接"><a href="#ssh连接" class="headerlink" title="ssh连接"></a>ssh连接</h2><ol>
 <li>需要开放ip，让本机ip可以访问集群</li>
 <li>可让开放的ip配置内网环境（196.168. . ),让其余机器也可访问aistation集群。</li>
 <li>ssh连接，默认端口22，连接方式为<code>ssh name@10.200.128.100</code>,不用修改，默认进入<code>mu01</code>cpu集群环境，可通过<code>ssh gpu01</code>–<code>ssh gpu07</code> 进入到不同的gpu环境中。</li>
 </ol>
-<h2 id="python-环境安装"><a href="#python-环境安装" class="headerlink" title="python 环境安装"></a>python 环境安装</h2><ol>
-<li>conda安装，可选择<code>miniconda</code>或者<code>anaconda</code>，自带的python版本为3.7.4，也可自行安装其他python版本。安装后可自行更换conda源（如中科大源和清华源等。),下载速度慢也可配置pip源。</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 清华源</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/</span><br><span class="line"></span><br><span class="line"># 中科大源</span><br><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/</span><br><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/</span><br><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/conda-forge/</span><br><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/msys2/</span><br><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/bioconda/</span><br><span class="line">conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/menpo/</span><br><span class="line"></span><br><span class="line"># 设置搜索时显示通道地址</span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>其他<code>pypi</code>包安装，如<code>matplotlib</code>、<code>numpy</code>等</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install matplotlib</span><br><span class="line">conda install numpy</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>torch安装，查看<code>cuda</code>（10.1）和<code>cudnn</code>（7.1.4）版本，先要通过ssh进入gpu环境中</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat /usr/local/cuda/version.txt</span><br><span class="line">cat /usr/local/cuda/include/cudnn.h | grep CUDNN_MAJOR -A 2</span><br></pre></td></tr></table></figure>
-<p>安装与cuda版本对应torch。选择pip或者conda</p>
-<blockquote>
-<p>可能遇到的问题：<br>pytorch 安装时由于下载速度过快，磁盘写入速度太慢，可用wget限制下载速度，利用whl安装包来安装。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># torch(1.3.1)和torchvision(0.4.2)版本号对应</span><br><span class="line">wget --limit-rate=10240000 https://files.pythonhosted.org/packages/f9/34/2107f342d4493b7107a600ee16005b2870b5a0a5a165bdf5c5e7168a16a6/torch-1.3.1-cp37-cp37m-manylinux1_x86_64.whl</span><br><span class="line"></span><br><span class="line">pip install torch-1.3.1-cp37-cp37m-manylinux1_x86_64.whl</span><br><span class="line">pip install torchvision</span><br></pre></td></tr></table></figure>
-<ol start="4">
-<li><p>jupyter notebook 配置，使得本低能够可视化访问服务器资源。（在vscode配置过程中，因为flock在nfs服务器上不能使用，故不选用vscode，可能以后会支持）</p>
-<p> 一、pip 安装jupyter，<code>pip install jupyter</code><br> 二、然后生成配置文件jupyter_notebook_config.py，<code>jupyter notebook --generate-config</code><br> 三、打开Ipython终端，生成jupyter密码</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">In [1]: from IPython.lib import passwd</span><br><span class="line"></span><br><span class="line">In [2]: passwd()</span><br><span class="line">Enter password: </span><br><span class="line">Verify password: </span><br><span class="line">Out[2]: &apos;sha1:0e422dfccef2:84cfbcbb3ef95872fb8e23be3999c123f862d856&apos;</span><br></pre></td></tr></table></figure>
-<p> 四、vim修改jupyter_notebook_config.py，<code>vim ~/.jupyter/jupyter_notebook_config.py</code></p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">c.NotebookApp.ip=&apos;11.11.11.2&apos; #gpu的IP或者cpu集群的IP</span><br><span class="line">c.NotebookApp.password = u&apos;sha:ce...刚才复制的那个密文&apos;</span><br><span class="line">c.NotebookApp.open_browser = False</span><br><span class="line">c.NotebookApp.port = 8960 #指定自己的端口</span><br></pre></td></tr></table></figure>
-<p> 五、Xshell配置IP映射<br> 在右键属性中找到<code>隧道</code>，添加本地IP和端口与服务器端口的映射，然后本地可以使用<br> <img src="/2019/11/15/aistation/port_Mapping.png" alt="映射"></p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook --ip=11.11.11.2 --port=8961</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<ol start="5">
-<li><p>其他</p>
-<blockquote>
-</blockquote>
-<p> <strong>jupyter notebook 主题配置</strong><br> 一. 安装Jupyter主题：<code>pip install jupyterthemes</code><br> 二. 更改主题配色：<code>jt -t monokai -f fira -fs 13 -cellw 90% -ofs 11 -dfs 11 -T -N</code>,更多配置见<a href="https://github.com/dunovank/jupyter-themes" target="_blank" rel="noopener">jupyter-themes</a></p>
-<blockquote>
-</blockquote>
-<p> <strong>jupyter notebook 代码补全</strong><br> 安装nbextensions插件：<code>pip install jupyter_contrib_nbextensions</code>，然后激活该插件<code>jupyter nbextensions_configurator enable –user</code></p>
-<blockquote>
-<p>注：如果页面无Hinterland项，或者不全，命令行执行：<br> <code>jupyter contrib nbextension install --user --skip-running-check</code></p>
-</blockquote>
-<p> <img src="/2019/11/15/aistation/nb_extensions.png" alt=""></p>
-</li>
-</ol>
-<h2 id="文件传输"><a href="#文件传输" class="headerlink" title="文件传输"></a>文件传输</h2><ul>
-<li><p>常用命令有ftp、sftp、scp等</p>
-</li>
-<li><p>安装Xftp，可传输文件夹或文件</p>
-</li>
-<li><p>在jupyter notebook中可以传输单个文件或者压缩包。</p>
-</li>
-<li><p>源码同步：git，pycharm</p>
-</li>
-</ul>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/11/15/aistation/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
